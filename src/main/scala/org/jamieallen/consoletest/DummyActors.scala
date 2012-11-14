@@ -2,11 +2,11 @@ package org.jamieallen.consoletest
 
 import akka.util.duration._
 import akka.actor._
-import akka.dispatch.ExecutionContext
-import akka.dispatch.Promise
+import akka.dispatch.{ ExecutionContext, Promise }
 import java.util.concurrent.TimeoutException
 import akka.dispatch.Await
 import akka.pattern.pipe
+import com.typesafe.config.ConfigFactory
 
 case class GetCustomerAccountBalances(id: Long)
 case class AccountBalances(
@@ -20,19 +20,19 @@ case class SavingsAccountBalances(
 case class MoneyMarketAccountBalances(
   val balances: Option[List[(Long, BigDecimal)]])
 
-class SavingsAccountProxy extends Actor {
+class SavingsAccountProxy extends Actor with ActorLogging {
   def receive = {
     case GetCustomerAccountBalances(id: Long) =>
       sender ! SavingsAccountBalances(Some(List((1, 150000), (2, 29000))))
   }
 }
-class CheckingAccountProxy extends Actor {
+class CheckingAccountProxy extends Actor with ActorLogging {
   def receive = {
     case GetCustomerAccountBalances(id: Long) =>
       sender ! CheckingAccountBalances(Some(List((3, 15000))))
   }
 }
-class MoneyMarketAccountsProxy extends Actor {
+class MoneyMarketAccountsProxy extends Actor with ActorLogging {
   def receive = {
     case GetCustomerAccountBalances(id: Long) =>
       sender ! MoneyMarketAccountBalances(Some(List()))
@@ -40,7 +40,7 @@ class MoneyMarketAccountsProxy extends Actor {
 }
 
 class AccountBalanceResponseHandler(savingsAccounts: ActorRef, checkingAccounts: ActorRef,
-  moneyMarketAccounts: ActorRef, originalSender: ActorRef) extends Actor {
+  moneyMarketAccounts: ActorRef, originalSender: ActorRef) extends Actor with ActorLogging {
 
   import context.dispatcher
   val promisedResult = Promise[AccountBalances]()
@@ -75,7 +75,7 @@ class AccountBalanceResponseHandler(savingsAccounts: ActorRef, checkingAccounts:
   }
 }
 
-class AccountBalanceRetriever(savingsAccounts: ActorRef, checkingAccounts: ActorRef, moneyMarketAccounts: ActorRef) extends Actor {
+class AccountBalanceRetriever(savingsAccounts: ActorRef, checkingAccounts: ActorRef, moneyMarketAccounts: ActorRef) extends Actor with ActorLogging {
   def receive = {
     case GetCustomerAccountBalances(id) =>
       val originalSender = sender
@@ -87,11 +87,14 @@ class AccountBalanceRetriever(savingsAccounts: ActorRef, checkingAccounts: Actor
 }
 
 object Bootstrap extends App {
-  val system = ActorSystem("console-test")
-  val savingsAccountProxy = system.actorOf(Props[SavingsAccountProxy])
-  val checkingAccountProxy = system.actorOf(Props[CheckingAccountProxy])
-  val moneyMarketAccountProxy = system.actorOf(Props[MoneyMarketAccountsProxy])
-  val accountBalanceRetriever = system.actorOf(Props(new AccountBalanceRetriever(savingsAccountProxy, checkingAccountProxy, moneyMarketAccountProxy)))
+  val config = ConfigFactory.load()
+  val system = ActorSystem("console-test", config.getConfig("console-test").withFallback(config))
+  val savingsAccountProxy = system.actorOf(Props[SavingsAccountProxy], "savingsAccountProxy")
+  val checkingAccountProxy = system.actorOf(Props[CheckingAccountProxy], "checkingAccountProxy")
+  val moneyMarketAccountProxy = system.actorOf(Props[MoneyMarketAccountsProxy], "moneyMarketAccountProxy")
+  val accountBalanceRetriever = system.actorOf(
+    Props(new AccountBalanceRetriever(savingsAccountProxy, checkingAccountProxy, moneyMarketAccountProxy)),
+    "accountBalanceRetriever")
 
   system.actorOf(Props(new Actor() {
     def receive = {

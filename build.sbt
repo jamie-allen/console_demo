@@ -20,6 +20,9 @@ credentials += Credentials(Path.userHome / "atmos.credentials")
 
 libraryDependencies ++= Seq(
                   "com.typesafe.atmos" % "atmos-akka-actor" % "2.0.3",
+                  "com.typesafe.atmos" % "atmos-akka-remote" % "2.0.3",
+                  "com.typesafe.atmos" % "atmos-akka-slf4j" % "2.0.3",
+                  "com.typesafe.atmos" % "atmos-akka-kernel" % "2.0.3",
                   "org.fusesource" % "sigar" % "1.6.4",
                   "javax.jms" % "jms" % "1.1",
                   "com.typesafe.akka" % "akka-testkit" % "2.0.3" % "test",
