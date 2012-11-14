@@ -96,12 +96,13 @@ object Bootstrap extends App {
   system.actorOf(Props(new Actor() {
     def receive = {
       case AccountBalances(cBalances, sBalances, mmBalances) =>
-        cBalances map (_ map (x => println("Checking Balance: %s".format(x._2))))
-        sBalances map (_ map (x => println("Saving Balance: %s".format(x._2))))
-        mmBalances map (_ map (x => println("MM Balance: %s".format(x._2))))
-        context.system.shutdown
+        for (c <- cBalances; (_, x) <- c) println("Checking Balance: " + x)
+        for (s <- sBalances; (_, x) <- s) println("Saving Balance: " + x)
+        for (m <- mmBalances; (_, x) <- m) println("MM Balance: " + x)
     }
 
-    accountBalanceRetriever.tell(GetCustomerAccountBalances(1L), self)
+    system.scheduler.schedule(0 seconds, 3 seconds) {
+      accountBalanceRetriever.tell(GetCustomerAccountBalances(1L), self)
+    }
   }))
 }
