@@ -43,8 +43,6 @@ class MoneyMarketAccountsProxy extends Actor with ActorLogging {
 class AccountBalanceResponseHandler(savingsAccounts: ActorRef, checkingAccounts: ActorRef,
   moneyMarketAccounts: ActorRef, originalSender: ActorRef) extends Actor with ActorLogging {
 
-  println("AccountBalanceResponseHandler Settings: " + context.props)
-
   import context.dispatcher
   val promisedResult = Promise[AccountBalances]()
   var checkingBalances, savingsBalances, mmBalances: Option[List[(Long, BigDecimal)]] = None
@@ -79,7 +77,6 @@ class AccountBalanceResponseHandler(savingsAccounts: ActorRef, checkingAccounts:
 }
 
 class AccountBalanceRetriever(savingsAccounts: ActorRef, checkingAccounts: ActorRef, moneyMarketAccounts: ActorRef) extends Actor with ActorLogging {
-  println("AccountBalanceRetriever Settings: " + context.props)
   def receive = {
     case GetCustomerAccountBalances(id) =>
       val originalSender = sender
@@ -93,7 +90,6 @@ class AccountBalanceRetriever(savingsAccounts: ActorRef, checkingAccounts: Actor
 object Bootstrap extends App {
   val config = ConfigFactory.load("application")
   val system = ActorSystem("consoletest", config.getConfig("consoletest").withFallback(config))
-  println("SETTINGS: " + system.settings)
   val savingsAccountProxy = system.actorOf(Props[SavingsAccountProxy], "savingsAccountProxy")
   val checkingAccountProxy = system.actorOf(Props[CheckingAccountProxy], "checkingAccountProxy")
   val moneyMarketAccountProxy = system.actorOf(Props[MoneyMarketAccountsProxy], "moneyMarketAccountProxy")
@@ -102,7 +98,6 @@ object Bootstrap extends App {
     "accountBalanceRetriever")
 
   system.actorOf(Props(new Actor() with ActorLogging {
-    println("AccountBalanceReceiver Settings: " + context.props)
     def receive = {
       case AccountBalances(cBalances, sBalances, mmBalances) =>
         for (c <- cBalances; (_, x) <- c) log.debug("Checking Balance: " + x)
@@ -110,7 +105,7 @@ object Bootstrap extends App {
         for (m <- mmBalances; (_, x) <- m) log.debug("MM Balance: " + x)
     }
 
-    log.info("**** Starting balance retrieval")
+    log.info("**** Starting balance retrieval ****")
     system.scheduler.schedule(0 seconds, 3 seconds) {
       accountBalanceRetriever.tell(GetCustomerAccountBalances(1L), self)
     }
