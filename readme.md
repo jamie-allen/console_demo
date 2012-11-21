@@ -2,8 +2,7 @@
 Consider this a QuickStart guide for getting up and running with the Typesafe Console.  This repo contains a very simple little Akka application I built to get a feel for how to integrate the Console.  Feel free to copy and use anything you like in trying to get similar results with your own application.
 
 ## NOTE
-* Until the console-instrumented versions of the Akka JARs are made generally available (which should happen in the next few weeks), you must have sbt credentials to access the repo and download them.
-** Credentials belong in an atmos.credentials file in your home folder with this layout:
+* Until the console-instrumented versions of the Akka JARs are made generally available (which should happen in the next few weeks), you must have sbt credentials to access the repo and download them.  Credentials belong in an atmos.credentials file in your home folder with this layout:
 
     realm=Artifactory Realm
     host=repo.typesafe.com
