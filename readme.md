@@ -3,6 +3,13 @@ Consider this a QuickStart guide for getting up and running with the Typesafe Co
 
 ## NOTE
 * Until the console-instrumented versions of the Akka JARs are made generally available (which should happen in the next few weeks), you must have sbt credentials to access the repo and download them.
+** Credentials belong in an atmos.credentials file in your home folder with this layout:
+
+    realm=Artifactory Realm
+    host=repo.typesafe.com
+    user=xxxx
+    password=xxxx
+
 * You must have the atmos and console application scripts to run the analytics collector and console locally.  I'm still not sure where the general public will be able to access those, but we will definitely make them available 
 
 # How to use it with your application
