@@ -1,5 +1,9 @@
 # Console Test
-This is a repo where I was playing around with using the Typesafe Console with my own sample application, to get a feel for what was involved in getting it up and running.  Feel free to copy and use anything you like in trying to get similar results with your own application.
+Consider this a QuickStart guide for getting up and running with the Typesafe Console.  This repo contains a very simple little Akka application I built to get a feel for how to integrate the Console.  Feel free to copy and use anything you like in trying to get similar results with your own application.
+
+## NOTE
+* Until the console-instrumented versions of the Akka JARs are made generally available (which should happen in the next few weeks), you must have sbt credentials to access the repo and download them.
+* You must have the atmos and console application scripts to run the analytics collector and console locally.  I'm still not sure where the general public will be able to access those, but we will definitely make them available 
 
 # How to use it with your application
 * Install Mongo 2.0.x (using 2.2.x will result in a ClassCastException converting a java.lang.Boolean to a java.lang.Integer or some such nonsense).
