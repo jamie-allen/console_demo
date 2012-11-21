@@ -11,7 +11,7 @@ Until the console-instrumented versions of the Akka JARs are made generally avai
 You must have the atmos and console application scripts to run the analytics collector and console locally.  I'm still not sure from where the general public will be able to access those, but we will definitely make them available when the Console is made generally available.
 
 # How to use it with your application
-* Install Mongo 2.0.x (using 2.2.x will result in a ClassCastException converting a java.lang.Boolean to a java.lang.Integer or some such nonsense).
+* [Install Mongo 2.0.x](http://www.mongodb.org/downloads) (using 2.2.x will result in a ClassCastException converting a java.lang.Boolean to a java.lang.Integer or some such nonsense).
 * Copy my [build.sbt](https://github.com/jamie-allen/console_demo/blob/master/build.sbt) resolvers and libraryDependencies definitions to fix transitive dependency issues.  Before running `sbt update`, make sure that you've configured your `atmos.credentials` file as shown above.
 * Edit your `application.conf` to have the atmos tracing defined as shown in [mine](https://github.com/jamie-allen/console_demo/blob/master/src/main/resources/application.conf).
 * Start your application.
