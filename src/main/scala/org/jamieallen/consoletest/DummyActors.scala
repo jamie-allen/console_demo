@@ -7,7 +7,6 @@ import java.util.concurrent.TimeoutException
 import akka.dispatch.Await
 import akka.pattern.pipe
 import com.typesafe.config.ConfigFactory
-import akka.util.Duration
 
 case class GetCustomerAccountBalances(id: Long)
 case class AccountBalances(
