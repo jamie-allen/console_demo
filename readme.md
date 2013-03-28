@@ -20,4 +20,6 @@ You must have the atmos and console application scripts to run the analytics col
 * Navigate your browser to `http://localhost:9000/`.  You will redirected to some `demo@typesafe.com` URL, and select the "Demo" application.
 * The node panel may take a bit to appear, give it time.  Select what you want to see using the Scope drop-down - ActorSystem, Dispatcher or Actors.
 
-Note that you may want to view the output without the Console.  This is possible by using a MongoDB viewer like [MongoHub](https://github.com/bububa/MongoHub-Mac), which is a pretty nice graphical tool.  Or you can use `curl` commands, like this: `curl http://127.0.0.1:28017/monitoring/metadata/nodes`
+Note that you may want to view the output without the Console.  This is possible by using a MongoDB viewer like [MongoHub](https://github.com/bububa/MongoHub-Mac), which is a pretty nice graphical tool.  Or you can use `curl` commands, like this: `curl http://127.0.0.1:28017/monitoring/metadata/nodes`.  See [this link](http://console-demo.typesafe.com:9898/monitoring/api.html) for more information about the RESTful URIs created.
+
+Also, note that MongoDB will allow you to use `curl` commands, but you cannot use the 27017 port through which you connected MongoHub.  Mongo will tell you to add 1000 to the port number, which is why my `curl` command above uses port 28017. 
