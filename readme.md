@@ -15,7 +15,9 @@ You must have the atmos and console application scripts to run the analytics col
 * Copy my [build.sbt](https://github.com/jamie-allen/console_demo/blob/master/build.sbt) resolvers and libraryDependencies definitions to fix transitive dependency issues.  Before running `sbt update`, make sure that you've configured your `atmos.credentials` file as shown above.
 * Edit your `application.conf` to have the atmos tracing defined as shown in [mine](https://github.com/jamie-allen/console_demo/blob/master/src/main/resources/application.conf).
 * Start your application.
-* Start the bin/atmos script.
+* Start the bin/atmos script (./atmos -query -analyze -remote-collector).
 * Start the bin/console script.
 * Navigate your browser to `http://localhost:9000/`.  You will redirected to some `demo@typesafe.com` URL, and select the "Demo" application.
 * The node panel may take a bit to appear, give it time.  Select what you want to see using the Scope drop-down - ActorSystem, Dispatcher or Actors.
+
+Note that you may want to view the output without the Console.  This is possible by using a MongoDB viewer like [MongoHub](https://github.com/bububa/MongoHub-Mac), which is a pretty nice graphical tool.  Or you can use `curl` commands, like this: `curl http://127.0.0.1:28017/monitoring/metadata/nodes`
